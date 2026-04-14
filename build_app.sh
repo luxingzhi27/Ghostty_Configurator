@@ -26,9 +26,12 @@ echo "📁 Creating App Bundle structure..."
 mkdir -p "$APP_DIR/Contents/MacOS"
 mkdir -p "$APP_DIR/Contents/Resources"
 
-# Step 4: Copy executable
-echo "📦 Copying executable..."
+# Step 4: Copy executable and resources
+echo "📦 Copying executable and resources..."
 cp ".build/release/$EXECUTABLE_NAME" "$APP_DIR/Contents/MacOS/"
+if [ -f "ghostty.icns" ]; then
+    cp "ghostty.icns" "$APP_DIR/Contents/Resources/AppIcon.icns"
+fi
 
 # Step 5: Create Info.plist
 echo "📝 Generating Info.plist..."
@@ -43,6 +46,8 @@ cat <<EOF > "$APP_DIR/Contents/Info.plist"
     <string>$BUNDLE_ID</string>
     <key>CFBundleName</key>
     <string>$APP_NAME</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
     <key>CFBundleShortVersionString</key>

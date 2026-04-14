@@ -63,6 +63,14 @@ codesign --force --deep --sign - "$APP_DIR"
 
 # Step 7: Create DMG
 echo "💿 Creating disk image (DMG)..."
-hdiutil create -volname "$APP_NAME" -srcfolder "$APP_DIR" -ov -format UDZO "$DMG_NAME"
+DMG_STAGING_DIR="dmg_staging"
+mkdir -p "$DMG_STAGING_DIR"
+cp -R "$APP_DIR" "$DMG_STAGING_DIR/"
+ln -s /Applications "$DMG_STAGING_DIR/Applications"
+
+hdiutil create -volname "$APP_NAME" -srcfolder "$DMG_STAGING_DIR" -ov -format UDZO "$DMG_NAME"
+
+# Clean up staging directory
+rm -rf "$DMG_STAGING_DIR"
 
 echo "✅ Build complete! You can find '$APP_DIR' and '$DMG_NAME' in your project folder."
